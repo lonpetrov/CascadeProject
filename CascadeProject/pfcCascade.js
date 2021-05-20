@@ -16,14 +16,44 @@ function Cascade() {
 	  alert("Error");
     }
 	
-	 alert("begin");
-		GetTreeCascade(assembly, session);
-		alert('assemblies '+ modelsOfAssemblies.length+ ' = ' + GetUniqueModels(modelsOfAssemblies).length);
-		alert('parts '+ modelsOfParts.length + ' = ' + GetUniqueModels(modelsOfParts).length);
+	alert("begin");
+	GetTreeCascade(assembly, session);
+	let uniqueParts = GetUniqueModels(modelsOfParts);
+	let uniqueAssemblies = GetUniqueModels(modelsOfAssemblies);
 
-	 alert("end");
+	//let i = uniqueParts[0].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue;
+	//let i = uniqueParts[0].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().discr;
+	//GetFlexSpecItems(uniqueParts);
+	//GetFlexSpecItems(uniqueAssemblies);
+	//alert('assemblies '+ modelsOfAssemblies.length + ' = ' + GetUniqueModels(modelsOfAssemblies).length);
+	//alert('parts ' + modelsOfParts.length + ' = ' + GetUniqueModels(modelsOfParts).length);
+
+	//for (var i = 0; i < uniqueParts.length; i++) {
+	//	alert(uniqueParts[i].InstanceName + ' ' + uniqueParts[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
+	//	alert(uniqueParts[i].Descr.Type);
+	//}
+	//for (var i = 0; i < uniqueAssemblies.length; i++) {
+	//	alert(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
+	//}
+
+	alert("end");
 }
 
+//get all items that have to be changed (materials, parts, assemlbies)
+function GetFlexSpecItems(list) {
+	paramValueType = pfcCreate("pfcParamValueType");
+    for (var i = 0; i < list.length; i++) {
+		if ((list[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().discr === paramValueType.PARAM_STRING)) {
+			if (list[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue === "—¡Œ–Œ◊Õ€≈ ≈ƒ»Õ»÷€" || "ƒ≈“¿À»" || "Ã¿“≈–»¿À€" ) {
+				alert(list[i].InstanceName + "!!!!");
+            }
+		}
+    }
+	
+}
+
+
+//Gets Unique Models
 function GetUniqueModels(list){
 	let result = [];
 	for (let i = 0; i < list.length; i++){
@@ -34,7 +64,6 @@ function GetUniqueModels(list){
 	}		
 	return result;
 }
-
 
 //Deletes retrieved models from collecton
 function FlushRetrievedModels(){
@@ -56,6 +85,7 @@ function GetTreeCascade(assembly, session){
 		  {
 			  //alert('Asm: ' + desc.Type + ' ' + desc.InstanceName);
 			  var assemblyModel = session.GetModelFromDescr(desc);
+			  alert('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName);
 			  modelsOfAssemblies.push(assemblyModel);
 			  GetTreeCascade(assemblyModel, session);	
 			  
@@ -63,14 +93,15 @@ function GetTreeCascade(assembly, session){
 		  else if(desc.Type == modelTypeClass.MDL_PART)
 		  {
 			//alert('Part: ' + desc.Type + ' ' + desc.InstanceName);
-			var partModel = session.GetModelFromDescr(desc);
+			  var partModel = session.GetModelFromDescr(desc);
+			  alert('Asm: ' + partModel.Type + ' ' + partModel.InstanceName)
 			modelsOfParts.push(partModel);
 			
 		  }
 		  
 	 }
  }
- 
+ //Adds rows to family table
  function AddNewRow(partModel,name){
 	var nameOfInst = "new_inst";
 			try

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CascadeProject": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false
+    }
+  }
+}
