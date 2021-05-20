@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Cascade</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+
+<body>
+
+	<script src="jscript/pfcUtils.js"></script> 
+	<script src="jscript/pfcCascade.js">document.writeln("Error loading script!");</script>
+	<script language="JavaScript">
+
+		function Cascade_wrapper() {
+			if (pfcIsMozilla())
+				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+
+			try {
+				FlushRetrievedModels();
+				Cascade();
+
+			}
+			catch (err) {
+				alert("Exception occurred: " + pfcGetExceptionType(err));
+			}
+		}
+
+	</script>
+
+	<div class="bg-dark text-white p-2">
+
+		<h1>Cascade</h1>
+
+		<form name=DR>
+			<input class="btn-primary" type=button value="Create Cascade Instances" id=button1 name=button1 onclick="Cascade_wrapper()">
+		</form>
+
+		<script language="JavaScript">
+
+		</script>
+
+
+	</div>
+
+</body>
+
+</html>
