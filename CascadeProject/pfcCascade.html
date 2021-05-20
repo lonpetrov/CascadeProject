@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
 	<script src="jscript/pfcUtils.js"></script> 
 	<script src="jscript/pfcCascade.js">document.writeln("Error loading script!");</script>
 	<script language="JavaScript">
@@ -16,17 +15,14 @@
 		function Cascade_wrapper() {
 			if (pfcIsMozilla())
 				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-
 			try {
 				FlushRetrievedModels();
 				Cascade();
-
 			}
 			catch (err) {
 				alert("Exception occurred: " + pfcGetExceptionType(err));
 			}
 		}
-
 	</script>
 
 	<div class="bg-dark text-white p-2">

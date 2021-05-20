@@ -8,8 +8,7 @@ function Cascade() {
 
     var session = pfcGetProESession();
     var assembly = session.CurrentModel;
-    var modelTypeClass = pfcCreate("pfcModelType");
-	//var modelItemType = pfcCreate("pfcModelItemType");
+	var modelTypeClass = pfcCreate("pfcModelType");
 
 	if (assembly == void null || assembly.Type != modelTypeClass.MDL_ASSEMBLY)
     {
