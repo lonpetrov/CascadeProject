@@ -1,5 +1,6 @@
 let modelsOfAssemblies = [];
 let modelsOfParts = [];
+let counter = 0;
 
 
 function Cascade() {
@@ -57,10 +58,12 @@ function GetFlexSpecItems(list) {
 }
 
 function Debugging(note) {
-		let newElem = document.createElement("h4");
-		const text = document.createTextNode(note);
-		newElem.appendChild(text);
-		document.body.appendChild(newElem);
+	counter++;
+	let newElem = document.createElement("h4");
+	const text = document.createTextNode(counter+': '+ note);
+	newElem.appendChild(text);
+	
+	document.body.appendChild(newElem);
 }
 
 //Gets Unique Models
