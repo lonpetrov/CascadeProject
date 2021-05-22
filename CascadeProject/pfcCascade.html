@@ -18,6 +18,7 @@
 			try {
 				FlushRetrievedModels();
 				Cascade();
+
 			}
 			catch (err) {
 				alert("Exception occurred: " + pfcGetExceptionType(err));
@@ -30,11 +31,15 @@
 
 		<form name=DR>
 			<input class="btn-primary" type=button value="Create Cascade Instances" id=button1 name=button1 onclick="Cascade_wrapper()">
+			<!--<input class="btn-primary" type=button value="Debug" id=button2 name=button2 onclick="myFunc()">-->
 		</form>
+		
+			
+		
 
-		<script language="JavaScript">
-
-		</script>
+		<!--<script language="JavaScript">
+			
+		</script>-->
 
 
 	</div>

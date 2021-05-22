@@ -1,6 +1,7 @@
 let modelsOfAssemblies = [];
 let modelsOfParts = [];
 
+
 function Cascade() {
 	
     if (pfcIsMozilla())
@@ -16,7 +17,9 @@ function Cascade() {
 	  alert("Error");
     }
 	
-	alert("begin");
+	//alert("begin");
+	Debugging("begin");
+
 	GetTreeCascade(assembly, session);
 	let uniqueParts = GetUniqueModels(modelsOfParts);
 	let uniqueAssemblies = GetUniqueModels(modelsOfAssemblies);
@@ -36,7 +39,8 @@ function Cascade() {
 	//	alert(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
 	//}
 
-	alert("end");
+	//alert("end");
+	Debugging("end");
 }
 
 //get all items that have to be changed (materials, parts, assemlbies)
@@ -52,6 +56,12 @@ function GetFlexSpecItems(list) {
 	
 }
 
+function Debugging(note) {
+		let newElem = document.createElement("h4");
+		const text = document.createTextNode(note);
+		newElem.appendChild(text);
+		document.body.appendChild(newElem);
+}
 
 //Gets Unique Models
 function GetUniqueModels(list){
@@ -78,23 +88,27 @@ function GetTreeCascade(assembly, session){
 
  for(var i=0;i<components.Count;i++)
 	 {
-		  var component = components.Item(i);
-		  var desc = component.ModelDescr;
+		  var component = components.Item(i);//pfcFeature - ÚËÔ ‰‡ÌÌÓÈ
+	 var desc = component.ModelDescr;
+	 let feat = component.Status
+
 
 		  if(desc.Type == modelTypeClass.MDL_ASSEMBLY)
 		  {
 			  //alert('Asm: ' + desc.Type + ' ' + desc.InstanceName);
 			  var assemblyModel = session.GetModelFromDescr(desc);
-			  alert('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName);
+			  //alert('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName);
+			  Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + feat);
 			  modelsOfAssemblies.push(assemblyModel);
 			  GetTreeCascade(assemblyModel, session);	
 			  
 		  }
 		  else if(desc.Type == modelTypeClass.MDL_PART)
 		  {
-			//alert('Part: ' + desc.Type + ' ' + desc.InstanceName);
+			  //alert('Part: ' + desc.Type + ' ' + desc.InstanceName);
 			  var partModel = session.GetModelFromDescr(desc);
-			  alert('Asm: ' + partModel.Type + ' ' + partModel.InstanceName)
+			  //alert('Part: ' + partModel.Type + ' ' + partModel.InstanceName)
+			  Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + feat);
 			modelsOfParts.push(partModel);
 			
 		  }
