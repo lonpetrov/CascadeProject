@@ -27,18 +27,18 @@ function Cascade() {
 
 	//let i = uniqueParts[0].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue;
 	//let i = uniqueParts[0].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().discr;
-	//GetFlexSpecItems(uniqueParts);
-	//GetFlexSpecItems(uniqueAssemblies);
-	//alert('assemblies '+ modelsOfAssemblies.length + ' = ' + GetUniqueModels(modelsOfAssemblies).length);
-	//alert('parts ' + modelsOfParts.length + ' = ' + GetUniqueModels(modelsOfParts).length);
+	GetFlexSpecItems(uniqueParts);
+	GetFlexSpecItems(uniqueAssemblies);
+	Debugging('assemblies ' + modelsOfAssemblies.length + ' = unique ' + GetUniqueModels(modelsOfAssemblies).length);
+	Debugging('parts ' + modelsOfParts.length + ' = unique ' + GetUniqueModels(modelsOfParts).length);
 
-	//for (var i = 0; i < uniqueParts.length; i++) {
-	//	alert(uniqueParts[i].InstanceName + ' ' + uniqueParts[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
-	//	alert(uniqueParts[i].Descr.Type);
-	//}
-	//for (var i = 0; i < uniqueAssemblies.length; i++) {
-	//	alert(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
-	//}
+	for (var i = 0; i < uniqueParts.length; i++) {
+		Debugging(uniqueParts[i].InstanceName + ' ' + uniqueParts[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
+		//Debugging(uniqueParts[i].Descr.Type);
+	}
+	for (var i = 0; i < uniqueAssemblies.length; i++) {
+		Debugging(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue)
+	}
 
 	//alert("end");
 	Debugging("end");
@@ -49,8 +49,8 @@ function GetFlexSpecItems(list) {
 	paramValueType = pfcCreate("pfcParamValueType");
     for (var i = 0; i < list.length; i++) {
 		if ((list[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().discr === paramValueType.PARAM_STRING)) {
-			if (list[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue === "—¡Œ–Œ◊Õ€≈ ≈ƒ»Õ»÷€" || "ƒ≈“¿À»" || "Ã¿“≈–»¿À€" ) {
-				alert(list[i].InstanceName + "!!!!");
+			if (list[i].GetParam("–¿«ƒ≈À_—œ≈÷").GetScaledValue().StringValue === "—¡Œ–Œ◊Õ€≈ ≈ƒ»Õ»÷€" || "ƒ≈“¿À»" || "Ã¿“≈–»¿À€") {
+				Debugging(list[i].InstanceName + "!!!!");
             }
 		}
     }
@@ -62,7 +62,6 @@ function Debugging(note) {
 	let newElem = document.createElement("h4");
 	const text = document.createTextNode(counter+': '+ note);
 	newElem.appendChild(text);
-	
 	document.body.appendChild(newElem);
 }
 
@@ -84,36 +83,30 @@ function FlushRetrievedModels(){
 	modelsOfParts = [];
 	
 }
-//gets two lists of models
+//gets two lists of active! models
 function GetTreeCascade(assembly, session){
 	var modelTypeClass = pfcCreate("pfcModelType");
+	var featureStatus = pfcCreate("pfcFeatureStatus");
 	var components = assembly.ListFeaturesByType(false, pfcCreate ("pfcFeatureType").FEATTYPE_COMPONENT); 
 
- for(var i=0;i<components.Count;i++)
-	 {
-		  var component = components.Item(i);//pfcFeature - ÚËÔ ‰‡ÌÌÓÈ
-	 var desc = component.ModelDescr;
-	 let feat = component.Status
+	for (var i = 0; i < components.Count; i++)
+	{
+		var component = components.Item(i);//pfcFeature
+		var desc = component.ModelDescr;
+		let status = component.Status;
 
-
-		  if(desc.Type == modelTypeClass.MDL_ASSEMBLY)
+		if (desc.Type == modelTypeClass.MDL_ASSEMBLY && status == featureStatus.FEAT_ACTIVE)
 		  {
-			  //alert('Asm: ' + desc.Type + ' ' + desc.InstanceName);
 			  var assemblyModel = session.GetModelFromDescr(desc);
-			  //alert('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName);
-			  Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + feat);
+			  Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
 			  modelsOfAssemblies.push(assemblyModel);
-			  GetTreeCascade(assemblyModel, session);	
-			  
+			  GetTreeCascade(assemblyModel, session);	  
 		  }
-		  else if(desc.Type == modelTypeClass.MDL_PART)
+		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
 		  {
-			  //alert('Part: ' + desc.Type + ' ' + desc.InstanceName);
 			  var partModel = session.GetModelFromDescr(desc);
-			  //alert('Part: ' + partModel.Type + ' ' + partModel.InstanceName)
-			  Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + feat);
+			  Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
 			modelsOfParts.push(partModel);
-			
 		  }
 		  
 	 }
