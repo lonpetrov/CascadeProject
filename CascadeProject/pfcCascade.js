@@ -93,16 +93,16 @@ function GetTreeCascade(assembly, session){
 
 		if (desc.Type == modelTypeClass.MDL_ASSEMBLY && status == featureStatus.FEAT_ACTIVE)
 		  {
-			  var assemblyModel = session.GetModelFromDescr(desc);
+			  var assemblyModel = session.RetrieveModel(desc);
 			  Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
 			  modelsOfAssemblies.push(assemblyModel);
 			  GetTreeCascade(assemblyModel, session);	  
 		  }
 		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
 		  {
-			  var partModel = session.GetModelFromDescr(desc);
-			  Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
-			modelsOfParts.push(partModel);
+				var partModel = session.RetrieveModel(desc);
+				Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
+				modelsOfParts.push(partModel);
 		  }
 		  
 	 }
