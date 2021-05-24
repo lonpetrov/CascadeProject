@@ -1,5 +1,6 @@
 let modelsOfAssemblies = [];
 let modelsOfParts = [];
+let debugMode = true;
 let counter = 0;
 
 
@@ -23,19 +24,11 @@ function Cascade() {
 	let uniqueParts = GetUniqueModels(modelsOfParts);
 	let uniqueAssemblies = GetUniqueModels(modelsOfAssemblies);
 
-	
-	GetFlexSpecItems(uniqueParts);
-	GetFlexSpecItems(uniqueAssemblies);
-	//Debugging('assemblies ' + modelsOfAssemblies.length + ' = unique ' + GetUniqueModels(modelsOfAssemblies).length);
-	//Debugging('parts ' + modelsOfParts.length + ' = unique ' + GetUniqueModels(modelsOfParts).length);
+	//GetFlexSpecItems(uniqueParts);
+	//GetFlexSpecItems(uniqueAssemblies);
 
-	//for (var i = 0; i < uniqueParts.length; i++) {
-	//	Debugging(uniqueParts[i].InstanceName + ' ' + uniqueParts[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue)
-	//	//Debugging(uniqueParts[i].Descr.Type);
-	//}
-	//for (var i = 0; i < uniqueAssemblies.length; i++) {
-	//	Debugging(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue)
-	//}
+	Debugging('assemblies ' + modelsOfAssemblies.length + ' = unique ' + GetUniqueModels(modelsOfAssemblies).length);
+	Debugging('parts ' + modelsOfParts.length + ' = unique ' + GetUniqueModels(modelsOfParts).length);
 
 	Debugging("end");
 }
@@ -43,22 +36,27 @@ function Cascade() {
 //get all items that have to be changed (materials, parts, assemlbies)
 function GetFlexSpecItems(list) {
 	paramValueType = pfcCreate("pfcParamValueType");
-    for (var i = 0; i < list.length; i++) {
-		if ((list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().discr === paramValueType.PARAM_STRING)) {
-			if (list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue === ("ÄÅÒÀËÈ" || "ÌÀÒÅÐÈÀËÛ" || "ÑÁÎÐÎ×ÍÛÅ ÅÄÈÍÈÖÛ")) {
-				Debugging(list[i].InstanceName + "!!!!" + list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue);
+	let specItems = [];
+	for (var i = 0; i < list.length; i++) {
+		let value = list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue();
+		if ((value.discr === paramValueType.PARAM_STRING)) {
+			if (value.StringValue === "ÄÅÒÀËÈ" || value.StringValue === "ÌÀÒÅÐÈÀËÛ" || value.StringValue === "ÑÁÎÐÎ×ÍÛÅ ÅÄÈÍÈÖÛ") {
+				//Debugging(list[i].InstanceName + " - " + value.StringValue);
+				specItems.push(list[i]);
             }
 		}
-    }
-	
+	}
+	return specItems;
 }
 
 function Debugging(note) {
-	counter++;
-	let newElem = document.createElement("h4");
-	const text = document.createTextNode(counter+': '+ note);
-	newElem.appendChild(text);
-	document.body.appendChild(newElem);
+	if (debugMode) {
+		counter++;
+		let newElem = document.createElement("h4");
+		const text = document.createTextNode(counter + ': ' + note);
+		newElem.appendChild(text);
+		document.body.appendChild(newElem);
+	}
 }
 
 //Gets Unique Models
@@ -76,8 +74,8 @@ function GetUniqueModels(list){
 function FlushRetrievedModels(){
 	modelsOfAssemblies = [];
 	modelsOfParts = [];
-	
 }
+
 //gets two lists of active! models
 function GetTreeCascade(assembly, session){
 	var modelTypeClass = pfcCreate("pfcModelType");
@@ -92,41 +90,19 @@ function GetTreeCascade(assembly, session){
 
 		if (desc.Type == modelTypeClass.MDL_ASSEMBLY && status == featureStatus.FEAT_ACTIVE)
 		{
-			//var assemblyModel = session.GetModelFromDesc(desc);
-			//var assemblyModel = session.RetrieveModel(desc);
-			let assemblyModel = GetModel(session, desc);
-			Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
+			var assemblyModel = session.GetModelFromDescr(desc);
+			//Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
 			modelsOfAssemblies.push(assemblyModel);
 			GetTreeCascade(assemblyModel, session);	  
 		  }
 		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
 		{
-			//var partModel = session.GetModelFromDesc(desc);
-			//var partModel = session.RetrieveModel(desc);
-			let partModel = GetModel(session, desc);
-			Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
+			var partModel = session.GetModelFromDescr(desc);
+			//Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
 			modelsOfParts.push(partModel);
 		  }
 		  
 	 }
-}
-
-
-function GetModel(session, desc) {
-	let listOfModels = MakeListFromModels(session.ListModels());
-	let listOfDescs = [];
-	for (var i = 0; i < listOfModels.length; i++) {
-		Debugging('from list models : '+listOfModels[i].InstanceName);
-		listOfDescs.push(listOfModels.ModelDescr)
-    }
-	if (!listOfDescs.indexOf(desc) === -1) {
-		Debugging('From Desc');
-		return session.GetModelFromDesc(desc);
-	} else {
-		Debugging('Retrieve');
-		return session.RetrieveModel(desc);
-    }
-
 }
 
  //Adds rows to family table
