@@ -1,5 +1,3 @@
-//let modelsOfAssemblies = [];
-//let modelsOfParts = [];
 let models = [];
 let debugMode = true;
 let counter = 0;
@@ -23,10 +21,8 @@ function Cascade() {
 
 	GetTreeCascade(assembly, session);
 	let unique = GetUniqueModels(models);
-	//let uniqueAssemblies = GetUniqueModels(modelsOfAssemblies);
-
 	let specs = GetFlexSpecItems(unique);
-	//let specAsms = GetFlexSpecItems(uniqueAssemblies);
+	Debugging('Models: ' + models.length + ' - Unique: ' + unique.length);
 
 	for (var i = 0; i < specs.length; i++) {
 		Debugging(specs[i].InstanceName);
