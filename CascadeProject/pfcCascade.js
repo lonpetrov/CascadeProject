@@ -29,13 +29,13 @@ function Cascade() {
 	//Debugging('assemblies ' + modelsOfAssemblies.length + ' = unique ' + GetUniqueModels(modelsOfAssemblies).length);
 	//Debugging('parts ' + modelsOfParts.length + ' = unique ' + GetUniqueModels(modelsOfParts).length);
 
-	for (var i = 0; i < uniqueParts.length; i++) {
-		Debugging(uniqueParts[i].InstanceName + ' ' + uniqueParts[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue)
-		//Debugging(uniqueParts[i].Descr.Type);
-	}
-	for (var i = 0; i < uniqueAssemblies.length; i++) {
-		Debugging(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue)
-	}
+	//for (var i = 0; i < uniqueParts.length; i++) {
+	//	Debugging(uniqueParts[i].InstanceName + ' ' + uniqueParts[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue)
+	//	//Debugging(uniqueParts[i].Descr.Type);
+	//}
+	//for (var i = 0; i < uniqueAssemblies.length; i++) {
+	//	Debugging(uniqueAssemblies[i].InstanceName + ' ' + uniqueAssemblies[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue)
+	//}
 
 	Debugging("end");
 }
@@ -45,8 +45,8 @@ function GetFlexSpecItems(list) {
 	paramValueType = pfcCreate("pfcParamValueType");
     for (var i = 0; i < list.length; i++) {
 		if ((list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().discr === paramValueType.PARAM_STRING)) {
-			if (list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue === "ÑÁÎÐÎ×ÍÛÅ ÅÄÈÍÈÖÛ" || "ÄÅÒÀËÈ" || "ÌÀÒÅÐÈÀËÛ") {
-				Debugging(list[i].InstanceName + "!!!!");
+			if (list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue === ("ÄÅÒÀËÈ" || "ÌÀÒÅÐÈÀËÛ" || "ÑÁÎÐÎ×ÍÛÅ ÅÄÈÍÈÖÛ")) {
+				Debugging(list[i].InstanceName + "!!!!" + list[i].GetParam("ÐÀÇÄÅË_ÑÏÅÖ").GetScaledValue().StringValue);
             }
 		}
     }
@@ -67,7 +67,6 @@ function GetUniqueModels(list){
 	for (let i = 0; i < list.length; i++){
 		if (result.indexOf(list[i]) === -1){
 			result.push(list[i]);
-			//alert('!');	
 		}
 	}		
 	return result;
@@ -92,21 +91,29 @@ function GetTreeCascade(assembly, session){
 		let status = component.Status;
 
 		if (desc.Type == modelTypeClass.MDL_ASSEMBLY && status == featureStatus.FEAT_ACTIVE)
-		  {
-			  var assemblyModel = session.RetrieveModel(desc);
-			  Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
-			  modelsOfAssemblies.push(assemblyModel);
-			  GetTreeCascade(assemblyModel, session);	  
+		{
+			//var assemblyModel = session.GetModelFromDesc(desc);
+			//var assemblyModel = session.RetrieveModel(desc);
+			Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
+			modelsOfAssemblies.push(assemblyModel);
+			GetTreeCascade(assemblyModel, session);	  
 		  }
 		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
-		  {
-				var partModel = session.RetrieveModel(desc);
-				Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
-				modelsOfParts.push(partModel);
+		{
+			//var partModel = session.GetModelFromDesc(desc);
+			//var partModel = session.RetrieveModel(desc);
+			Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
+			modelsOfParts.push(partModel);
 		  }
 		  
 	 }
- }
+}
+
+function GetModel(session, desc) {
+	let listOfModels = session.ListModels();
+
+}
+
  //Adds rows to family table
  function AddNewRow(partModel,name){
 	var nameOfInst = "new_inst";
