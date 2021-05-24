@@ -1,5 +1,6 @@
-let modelsOfAssemblies = [];
-let modelsOfParts = [];
+//let modelsOfAssemblies = [];
+//let modelsOfParts = [];
+let models = [];
 let debugMode = true;
 let counter = 0;
 
@@ -21,14 +22,15 @@ function Cascade() {
 	Debugging("begin");
 
 	GetTreeCascade(assembly, session);
-	let uniqueParts = GetUniqueModels(modelsOfParts);
-	let uniqueAssemblies = GetUniqueModels(modelsOfAssemblies);
+	let unique = GetUniqueModels(models);
+	//let uniqueAssemblies = GetUniqueModels(modelsOfAssemblies);
 
-	//GetFlexSpecItems(uniqueParts);
-	//GetFlexSpecItems(uniqueAssemblies);
+	let specs = GetFlexSpecItems(unique);
+	//let specAsms = GetFlexSpecItems(uniqueAssemblies);
 
-	Debugging('assemblies ' + modelsOfAssemblies.length + ' = unique ' + GetUniqueModels(modelsOfAssemblies).length);
-	Debugging('parts ' + modelsOfParts.length + ' = unique ' + GetUniqueModels(modelsOfParts).length);
+	for (var i = 0; i < specs.length; i++) {
+		Debugging(specs[i].InstanceName);
+    }
 
 	Debugging("end");
 }
@@ -92,14 +94,14 @@ function GetTreeCascade(assembly, session){
 		{
 			var assemblyModel = session.GetModelFromDescr(desc);
 			//Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
-			modelsOfAssemblies.push(assemblyModel);
+			models.push(assemblyModel);
 			GetTreeCascade(assemblyModel, session);	  
 		  }
 		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
 		{
 			var partModel = session.GetModelFromDescr(desc);
 			//Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
-			modelsOfParts.push(partModel);
+			models.push(partModel);
 		  }
 		  
 	 }
