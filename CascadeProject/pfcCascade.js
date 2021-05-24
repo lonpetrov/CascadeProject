@@ -94,6 +94,7 @@ function GetTreeCascade(assembly, session){
 		{
 			//var assemblyModel = session.GetModelFromDesc(desc);
 			//var assemblyModel = session.RetrieveModel(desc);
+			let assemblyModel = GetModel(session, desc);
 			Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
 			modelsOfAssemblies.push(assemblyModel);
 			GetTreeCascade(assemblyModel, session);	  
@@ -102,6 +103,7 @@ function GetTreeCascade(assembly, session){
 		{
 			//var partModel = session.GetModelFromDesc(desc);
 			//var partModel = session.RetrieveModel(desc);
+			let partModel = GetModel(session, desc);
 			Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
 			modelsOfParts.push(partModel);
 		  }
@@ -109,8 +111,21 @@ function GetTreeCascade(assembly, session){
 	 }
 }
 
+
 function GetModel(session, desc) {
-	let listOfModels = session.ListModels();
+	let listOfModels = MakeListFromModels(session.ListModels());
+	let listOfDescs = [];
+	for (var i = 0; i < listOfModels.length; i++) {
+		Debugging('from list models : '+listOfModels[i].InstanceName);
+		listOfDescs.push(listOfModels.ModelDescr)
+    }
+	if (!listOfDescs.indexOf(desc) === -1) {
+		Debugging('From Desc');
+		return session.GetModelFromDesc(desc);
+	} else {
+		Debugging('Retrieve');
+		return session.RetrieveModel(desc);
+    }
 
 }
 
