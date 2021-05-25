@@ -8,8 +8,10 @@
 </head>
 
 <body>
-	<script src="jscript/pfcUtils.js"></script> 
+	<script src="jscript/pfcUtils.js"></script>
 	<script src="pfcCascade.js">document.writeln("Error loading script!");</script>
+	<script src="pfcTree.js">document.writeln("Error loading script!");</script>
+	<!--<script type="module" src="../lib/QueueStruct.js">document.writeln("Error loading script!");</script>-->
 	<script language="JavaScript">
 
 		function Cascade_wrapper() {
@@ -25,23 +27,27 @@
 			}
 		}
 	</script>
+	<script language="JavaScript">
+
+		function Tree_wrapper() {
+			if (pfcIsMozilla())
+				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+			try {
+
+			}
+			catch (err) {
+				alert("Exception occurred: " + pfcGetExceptionType(err));
+			}
+		}
+	</script>
 
 	<div class="bg-dark text-white p-2">
 		<h1>Cascade</h1>
-
-		<form name=DR>
-			<input class="btn-primary" type=button value="Create Cascade Instances" id=button1 name=button1 onclick="Cascade_wrapper()">
-			<!--<input class="btn-primary" type=button value="Debug" id=button2 name=button2 onclick="myFunc()">-->
-		</form>
-		
-			
-		
-
-		<!--<script language="JavaScript">
-			
-		</script>-->
-
-
+		<input class="btn btn-primary m-1 p-2" type=button value="Create Cascade Instances" id=button1 name=button1 onclick="Cascade_wrapper()">
+		<input class="btn btn-danger m-1 p-2" type=button value="Tree Structure" id=button2 name=button2 onclick="Tree_wrapper()">
+	</div>
+	<div id="debugging">
+		<p>Debug:</p>
 	</div>
 
 </body>

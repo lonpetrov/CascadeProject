@@ -70,8 +70,8 @@ function GetUniqueModels(list){
 
 //Deletes retrieved models from collecton
 function FlushRetrievedModels(){
-	modelsOfAssemblies = [];
-	modelsOfParts = [];
+	models = [];
+	//modelsOfParts = [];
 }
 
 //gets two lists of active! models
