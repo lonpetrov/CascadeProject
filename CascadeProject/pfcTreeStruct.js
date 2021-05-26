@@ -1,8 +1,12 @@
-let models = [];
-let debugMode = true;
-let counter = 0;
+function TreeStruct(name) {
+	if (debugMode) {
+		let msg = 'Cоздан объект: ';
+		Debugging(msg + name, "#FF0000");
+	}
+	this.models = [];
+}
 
-function Cascade() {
+TreeStruct.prototype.Cascade = function() {
 	
     if (pfcIsMozilla())
         netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
@@ -18,10 +22,10 @@ function Cascade() {
 	
 	Debugging("begin");
 
-	GetTreeCascade(assembly, session);
-	let unique = GetUniqueModels(models);
-	let specs = GetFlexSpecItems(unique);
-	Debugging('Models: ' + models.length + ' - Unique: ' + unique.length);
+	this.GetTreeCascade(assembly, session);
+	let unique = this.GetUniqueModels(this.models);
+	let specs = this.GetFlexSpecItems(unique);
+	Debugging('Models: ' + this.models.length + ' - Unique: ' + unique.length);
 
 	for (var i = 0; i < specs.length; i++) {
 		Debugging(specs[i].InstanceName);
@@ -42,7 +46,7 @@ function Cascade() {
 }
 
 //get all items that have to be changed (materials, parts, assemlbies)
-function GetFlexSpecItems(list) {
+TreeStruct.prototype.GetFlexSpecItems = function(list) {
 	paramValueType = pfcCreate("pfcParamValueType");
 	let specItems = [];
 	for (var i = 0; i < list.length; i++) {
@@ -57,18 +61,8 @@ function GetFlexSpecItems(list) {
 	return specItems;
 }
 
-function Debugging(note) {
-	if (debugMode) {
-		counter++;
-		let newElem = document.createElement("h4");
-		const text = document.createTextNode(counter + ': ' + note);
-		newElem.appendChild(text);
-		document.body.appendChild(newElem);
-	}
-}
-
 //Gets Unique Models
-function GetUniqueModels(list){
+TreeStruct.prototype.GetUniqueModels = function(list){
 	let result = [];
 	for (let i = 0; i < list.length; i++){
 		if (result.indexOf(list[i]) === -1){
@@ -79,13 +73,13 @@ function GetUniqueModels(list){
 }
 
 //Deletes retrieved models from collecton
-function FlushRetrievedModels(){
-	models = [];
-	//modelsOfParts = [];
+TreeStruct.prototype.FlushRetrievedModels = function (){
+	this.models = [];
 }
 
 //gets two lists of active! models
-function GetTreeCascade(assembly, session){
+TreeStruct.prototype.GetTreeCascade = function (assembly, session) {
+	var self = this;
 	var modelTypeClass = pfcCreate("pfcModelType");
 	var featureStatus = pfcCreate("pfcFeatureStatus");
 	var components = assembly.ListFeaturesByType(false, pfcCreate ("pfcFeatureType").FEATTYPE_COMPONENT); 
@@ -100,21 +94,21 @@ function GetTreeCascade(assembly, session){
 		{
 			var assemblyModel = session.GetModelFromDescr(desc);
 			//Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
-			models.push(assemblyModel);
-			GetTreeCascade(assemblyModel, session);	  
+			this.models.push(assemblyModel);
+			self.GetTreeCascade(assemblyModel, session);	  
 		  }
 		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
 		{
 			var partModel = session.GetModelFromDescr(desc);
 			//Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
-			models.push(partModel);
+			this.models.push(partModel);
 		  }
 		  
 	 }
 }
 
  //Adds rows to family table
- function AddNewRow(partModel,name){
+TreeStruct.prototype.AddNewRow = function (partModel,name){
 	var nameOfInst = "new_inst";
 			try
 			{
@@ -136,15 +130,16 @@ function GetTreeCascade(assembly, session){
 }
 
 //Makes list from Models
-function MakeListFromModels(models){
+TreeStruct.prototype.MakeListFromModels = function (models){
 	let out = [];
 	for(let i = 0; i < models.Count; i++){
 		out.push(models.Item(i));
 	}
 	return out;
 }
+
 //Gets list of InstanceName of Parts
-function GetInstanceNames(list){
+TreeStruct.prototype.GetInstanceNames = function (list){
 	let result = [];
 	for (let i = 0; i < list.length; i++){
 		result.push(list[i].InstanceName);

@@ -8,6 +8,7 @@
 </head>
 
 <body>
+	<script type="text/javascript" src="Debugger.js"></script>
 	<script type="text/javascript" src="lib/pfcUtils.js"></script>
 	<script type="text/javascript" src="lib/pfcTree.js"></script>
 	<script type="text/javascript" src="pfcCascade.js"></script>
@@ -19,9 +20,9 @@
 			if (pfcIsMozilla())
 				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
 			try {
-				FlushRetrievedModels();
-				Cascade();
-
+				let cascadeStr = new CascadeStruct('pfcCascade');
+                cascadeStr.FlushRetrievedModels();
+                cascadeStr.Cascade();
 			}
 			catch (err) {
 				alert("Exception occurred: " + pfcGetExceptionType(err));
@@ -34,8 +35,9 @@
 			if (pfcIsMozilla())
 				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
 			try {
-                FlushRetrievedModels();
-                Cascade();
+				let treeStr = new TreeStruct('pfcTree');
+				treeStr.FlushRetrievedModels();
+				treeStr.Cascade();
 			}
 			catch (err) {
 				alert("Exception occurred: " + pfcGetExceptionType(err));
