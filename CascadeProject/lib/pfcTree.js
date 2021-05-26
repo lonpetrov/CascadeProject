@@ -1,3 +1,4 @@
+
 function Queue() {
     this._oldestIndex = 1;
     this._newestIndex = 1;
@@ -47,6 +48,7 @@ Tree.prototype.traverseDF = function (callback) {
     })(this._root);
 };
 
+//this
 Tree.prototype.traverseBF = function (callback) {
     let queue = new Queue();
     queue.enqueue(this._root);
@@ -124,13 +126,13 @@ Tree.prototype.remove = function (data, fromData, traversal) {
 };
 
 
-let tree = new Tree('CEO');
-tree.add('VP of Happines', 'CEO', tree.traverseBF);
-tree.add('VP of Finance', 'CEO', tree.traverseBF);
-tree.add('VP of Sadness', 'CEO', tree.traverseBF);
-tree.add('Director of Puppies', 'VP of Finance', tree.traverseBF);
-tree.add('Manager of Puppies', 'Director of Puppies', tree.traverseBF);
+//let tree = new Tree('CEO');
+//tree.add('VP of Happines', 'CEO', tree.traverseBF);
+//tree.add('VP of Finance', 'CEO', tree.traverseBF);
+//tree.add('VP of Sadness', 'CEO', tree.traverseBF);
+//tree.add('Director of Puppies', 'VP of Finance', tree.traverseBF);
+//tree.add('Manager of Puppies', 'Director of Puppies', tree.traverseBF);
 
-tree.traverseDF(function (node) {
-    Debugging(node.data);
-});
+//tree.traverseDF(function (node) {
+//    Debugging(node.data);
+//});
