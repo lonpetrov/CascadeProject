@@ -3,7 +3,13 @@ function TreeStruct(name) {
 		let msg = 'Cоздан объект: ';
 		Debugging(msg + name, "#FF0000");
 	}
+
 	this.models = [];
+	this.modelsStr = new Tree(pfcGetProESession().CurrentModel.InstanceName);
+
+	//this.modelsStr.traverseDF(function (node) {
+	//	Debugging(node.data);
+	//})
 }
 
 TreeStruct.prototype.Cascade = function() {
@@ -14,7 +20,6 @@ TreeStruct.prototype.Cascade = function() {
     var session = pfcGetProESession();
     var assembly = session.CurrentModel;
 	var modelTypeClass = pfcCreate("pfcModelType");
-
 	if (assembly == void null || assembly.Type != modelTypeClass.MDL_ASSEMBLY)
     {
       throw new Error  (0, "Current model is not an assembly.");

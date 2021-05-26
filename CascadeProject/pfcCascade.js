@@ -4,6 +4,7 @@ function CascadeStruct(name) {
 		Debugging(msg + name, "#FF0000");
     }
 	this.models = [];
+
 }
 
 CascadeStruct.prototype.Cascade = function () {
