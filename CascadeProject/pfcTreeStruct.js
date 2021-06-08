@@ -5,11 +5,15 @@ function TreeStruct(name) {
 	}
 
 	this.models = [];
-	this.modelsStr = new Tree(pfcGetProESession().CurrentModel.InstanceName);
+	this.mainModel = pfcGetProESession().CurrentModel;
+	this.modelsStr = new Tree(this.mainModel);
 
-	//this.modelsStr.traverseDF(function (node) {
-	//	Debugging(node.data);
-	//})
+	//Debugging(this.modelsStr._root.data);
+
+	this.modelsStr.traverseBF(function (node) {
+		Debugging(node.data.InstanceName);
+	});
+
 }
 
 TreeStruct.prototype.Cascade = function() {
@@ -97,16 +101,28 @@ TreeStruct.prototype.GetTreeCascade = function (assembly, session) {
 
 		if (desc.Type == modelTypeClass.MDL_ASSEMBLY && status == featureStatus.FEAT_ACTIVE)
 		{
-			var assemblyModel = session.GetModelFromDescr(desc);
-			//Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
-			this.models.push(assemblyModel);
-			self.GetTreeCascade(assemblyModel, session);	  
+			let assemblyModel = session.GetModelFromDescr(desc);
+			////Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
+			this.modelsStr.contains(function (node) {
+				if (node.parent === null) {
+					this.modelsStr.add(assemblyModel, this.mainModel, this.modelsStr.traverseBF);
+                } else if (true) {
+
+                }
+			}, this.modelsStr.traverseBF);
+			//tree.add('VP of Happines', 'CEO', tree.traverseBF);
+			//var assemblyModel = session.GetModelFromDescr(desc);
+			////Debugging('Asm: ' + assemblyModel.Type + ' ' + assemblyModel.InstanceName + ' ' + status);
+			//this.modelsStr.add(assemblyModel, this.modelsStr._root.data, this.modelsStr.traverseBF);
+			//this.models.push(assemblyModel);
+			//self.GetTreeCascade(assemblyModel, session);	  
 		  }
 		else if (desc.Type == modelTypeClass.MDL_PART && status == featureStatus.FEAT_ACTIVE)
 		{
-			var partModel = session.GetModelFromDescr(desc);
-			//Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
-			this.models.push(partModel);
+			//var partModel = session.GetModelFromDescr(desc);
+			////Debugging('Part: ' + partModel.Type + ' ' + partModel.InstanceName + ' ' + status);
+			//this.modelsStr.add(assemblyModel, this.modelsStr._root.data, this.modelsStr.traverseBF);
+			//this.models.push(partModel);
 		  }
 		  
 	 }
